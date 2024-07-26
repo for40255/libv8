@@ -88,6 +88,7 @@ if errorlevel 1 (
 )
 
 dir ".\out\release\obj\v8_*.lib"
+dir ".\out\release\obj\*.*"
 
 popd
 
