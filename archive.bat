@@ -41,7 +41,8 @@ if not exist "%outputDir%" (
 )
 
 xcopy /E /I /Q /Y "%dir%\v8\include" "%outputDir%"
-copy /Y "%dir%\v8\out\release\obj\v8_monolith.lib" "%outputDir%"
+copy /Y "%dir%\v8\out\release\obj\*.lib" "%outputDir%"
+copy /Y "%dir%\v8\out\release\obj\*.exe" "%outputDir%"
 copy /Y "%dir%\gn-args_%os%.txt" "%outputDir%"
 
 where 7z >nul 2>nul
