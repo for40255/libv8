@@ -1,4 +1,4 @@
-name: V8 Build Test
+name: V8 Build manually
 
 on:
   workflow_dispatch:
