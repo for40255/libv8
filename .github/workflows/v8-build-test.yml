@@ -9,6 +9,7 @@ on:
       - "depot_tools"
       - ".gitignore"
       - ".gitpod*"
+      - ".github/"
 
 jobs:
   build-test:
