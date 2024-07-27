@@ -1,0 +1,53 @@
+name: V8 Build Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    name: Build V8
+    strategy:
+      matrix:
+        os: [windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          clean: true
+          fetch-depth: 1
+
+      - name: Restore V8 Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            v8
+            .gclient_entries
+            .gclient_previous_sync_commits
+            .cipd
+          key: ${{ runner.os }}-${{ runner.arch }}:libv8:v8:${{ hashFiles('**/VERSION') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}:libv8:v8:
+
+
+      - name: Initialize Archive Name (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\.github\workflows\scripts\archive-name.ps1
+
+
+      - name: Build V8 for Windows
+        if: startsWith(matrix.os, 'windows')
+        uses: ./.github/actions/build-windows
+        with:
+          archive-name: ${{ env.ARCHIVE_NAME }}
+
+      - name: Archive V8 Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: |
+            *.tar.xz
+            *.7z
+          retention-days: 7
